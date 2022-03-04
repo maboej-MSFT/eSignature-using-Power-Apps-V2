@@ -19,40 +19,26 @@ to check which user did the login to ensure the login was done by the same user.
 
 There are 4 elements:
 
--   Azure Ad App Registration: is used to be able to connect to Microsoft Graph.
+-   Azure AD App Registration: is used to be able to connect to Microsoft Graph.
 
 -   Power Automate Cloud flow: is used to get the request from the app and send
     the sign in request to Microsoft Graph, and respond the result to the app.
 
--   Power Apps Canvas app: The user use the app and click resign. The app save
+-   Power Apps Canvas app: The user use the app and click resign. The app saves
     the data and redirect the user the Office 365 login service. After the login
-    the request is redirected back to the app, it load the data and call the
+    the request is redirected back to the app, it loads the data and call the
     cloud flow to validate the user that did the login.
 
--   Dataverse Table: is used to store the data and session id
-
-# Import the sample solution
-
-1.  Download the “eSignature with sign-in.zip” solution file and import it  
-    ![Graphical user interface, application Description automatically
-    generated](media/b6d8f65073a11d5b942320b9d94bfc0f.png)
-
-2.  After import open the solution
-
-3.  Open Settings of the Canvas App  
-    ![Graphical user interface, application, Word Description automatically
-    generated](media/fbe591b232c167ccb2197ce6b87a6777.png)
-
-4.  Get the web link of your app  
-    ![Graphical user interface, text, application, email Description
-    automatically generated](media/443c14cf480d20647c34efc3e05ecf4f.png)
-
-Note: you can use the web link with or without the ?tenantid=xxxxx
+-   Dataverse Table: is used to store the data and session id. But you can use
+    whatever table to store the data and you can use another id for the session
+    id, can be the unique id from the table record.
 
 # Create Application Registration in Azure AD
 
 To make the Graph call we need an application key and a secret that have access
-to sign in as the user. You need a Tenant Administrator to do that.
+to sign in as the user. You can use the same App Registration for many apps.
+
+*You need a Tenant Administrator to do that.*
 
 1.  Open Azure AD: <https://aad.portal.azure.com/>
 
@@ -81,7 +67,7 @@ to sign in as the user. You need a Tenant Administrator to do that.
     ![Graphical user interface, text, application, email Description
     automatically generated](media/8261e1586670594996823187d4621b9f.png)
 
-8.  Click “API permisions” and click “Grand admin consent”  
+8.  Click “API permissions” and click “Grand admin consent”  
     ![Graphical user interface, text, application, email Description
     automatically generated](media/a2377db9b4d88e5e6f0bfa21bf718321.png)
 
@@ -89,38 +75,84 @@ to sign in as the user. You need a Tenant Administrator to do that.
     ![Graphical user interface, text, application Description automatically
     generated](media/3c839652dc093d937e0c498c526c05b5.png)
 
-10. Ensure the persissions  
+10. Ensure the permissions  
     ![Graphical user interface, text, application, email Description
     automatically generated](media/b902e853b280096020ab71ebd577c3fa.png)
 
-11. In Overview click “Redirect URIs”  
+11. You need to add WEB URL later in this guide.
+
+# 
+
+# Import the sample solution
+
+1.  Download the “eSignaturewithSignin_x_x_x_x.zip” solution file and import it 
+    
+    ![Graphical user interface, application Description automatically
+    generated](media/b6d8f65073a11d5b942320b9d94bfc0f.png)
+
+2.  Update the environments variable and click “Import”  
+    ![Graphical user interface, application Description automatically
+    generated](media/89535a7b49b1f83926d2fb2bc98728c0.png)
+
+3.  After import open the solution
+
+4.  Open Settings of the Canvas App  
+    ![Graphical user interface, application, Word Description automatically
+    generated](media/fbe591b232c167ccb2197ce6b87a6777.png)
+
+5.  Get the web link of your app (without the ?tenantid), and App ID and save
+    them for later.  
+    ![Graphical user interface, text, application, email Description
+    automatically generated](media/4cc5faf4999bda9c31cb5e8347fdec41.png)
+
+6.  Update the “eSignaturePowerAppID” environment variable:  
+    ![Background pattern, rectangle Description automatically generated with
+    medium confidence](media/de8e3ad35d60ef6c67f9120a038f40b6.png)
+
+7.  Replace the current value with the appid you just saved  
+    ![Graphical user interface, text, application, email Description
+    automatically generated](media/64f4bb6f4f00d8b875cd9725c7726184.png)
+
+8.  Save the variable.
+
+# Update the Application Registration in Azure AD
+
+We need to add the app URL to the app registration, to be able to de the
+redirect back to the app. There can be multiple URL’s for many apps.
+
+1.  In Overview click “Redirect URIs”  
     ![Graphical user interface, text, application, email Description
     automatically generated](media/782ff22330ccc1754b1cdc9d211d22d6.png)
 
-12. Click “Add a platform” and select “Web”  
-    ![Graphical user interface, application, Word Description automatically
-    generated](media/ce03699f8876f35807efdd55269efaf5.png)
+    1.  Click “Add a platform” and select “Web”  
+        ![Graphical user interface, application, Word Description automatically
+        generated](media/ce03699f8876f35807efdd55269efaf5.png)
 
-13. Add the URL og the Power Apps  
-    ![Graphical user interface, text, application Description automatically
-    generated with medium
-    confidence](media/0c221778ee4507365af495012ed67dcd.png)
+    2.  Add the URL og the Web link to the app  
+        ![Graphical user interface, text, application Description automatically
+        generated with medium
+        confidence](media/0c221778ee4507365af495012ed67dcd.png)
 
-14. Click “Configure”
+    3.  Click “Configure”
 
-15. Now you are done with the App registration.
+    4.  Now you are done with the App registration.
+
+Note: there can be many web’s added to the same App Registration.
+
+# 
 
 # Update the cloud flow
 
-1.  Open the “CheckTokenCode” cloud flow  
-    ![Graphical user interface, application, Teams Description automatically
-    generated](media/fbac37fd7fcc99e78698d042095fec4a.png)
+The cloud flow need to bed turn off and on again to register the updated
+environment variables.
 
-2.  Update TenantID, ClientID, ClientSecret and Web url from the Canvas app  
+1.  Turn the cloud flow “CheckTokenCode” off  
     ![Graphical user interface, application, Teams Description automatically
-    generated](media/a58db449e404d9133e2dc0cd0ba574ad.png)
+    generated](media/171982ad9473077952fc7d29b6fe413d.png)
 
-3.  Save the flow and close it.
+2.  Turn the cloud flow “CheckTokenCode” on  
+    ![Graphical user interface, application Description automatically
+    generated](media/0839b2349ac07994ec7f009fb0a51b7a.png)
 
 # Test the solution
 
