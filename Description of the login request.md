@@ -5,7 +5,7 @@ and this is the description on that request.
 
 GET request to the Office 365 login service, example:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP GET
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP
 // Line breaks for legibility only
 
 https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize?
@@ -27,7 +27,7 @@ client_id=23f97599-2ed4-4514-82f7-2a7958de68cf
 | redirect_uri  | The redirect_uri of your app, where authentication responses can be sent and received by your app. This is the web link for the Power App                                                                                                                                                                                                                                                                                                                                                       |
 | response_mode | query: Default when requesting an access token. Provides the code as a query string parameter on your redirect URI.                                                                                                                                                                                                                                                                                                                                                                             |
 | state         | A value included in the request that is also returned in the token response. It can be a string of any content that you wish. I this solution we use state to store the record id.                                                                                                                                                                                                                                                                                                              |
-| prompt        | prompt=login forces the user to enter their credentials on that request, negating single-sign on.                                                                                                                                                                                                                                                                                                                                                                                               |
+| prompt        | prompt=login forces the user to enter their credentials on that request, negating single sign on.                                                                                                                                                                                                                                                                                                                                                                                               |
 | login_hint    | You can use this parameter to pre-fill the username and email address field of the sign-in page for the user.                                                                                                                                                                                                                                                                                                                                                                                   |
 
 Sample redirect request:
@@ -47,12 +47,12 @@ request.
 
 # To validate the user – make at Microsoft Graph request
 
-In the solution this I done by the cloud flow “CheckTokenCode”, but here is the
-background.
+In the solution this was done by the cloud flow “CheckTokenCode”, but here is
+the background.
 
-First we need to get a access token to Microsoft Graph using the token code:
+First, we need to get a access token to Microsoft Graph using the token code:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP POST
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP
 https://login.microsoftonline.com/{tenant}/oauth2/token
 
 // Line breaks for legibility only
@@ -68,7 +68,7 @@ grant_type=authorization_code
 
 This will return an access token we can use the make the Microsoft Grap call:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP GET
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTTP
 https://graph.microsoft.com/v1.0/me
 
 {
@@ -78,7 +78,7 @@ https://graph.microsoft.com/v1.0/me
 
 This request will return all the basic info:
 
-Sample
+Sample result
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",

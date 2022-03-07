@@ -2,8 +2,6 @@
 
 By Martin Boejstrup, Microsoft 3/2/2022
 
-See a demo video here : https://m.youtube.com/watch?v=T_d3F7E5WjA
-
 ### Background
 
 Sometimes you need a signature solution in Power Apps. Out of the box there is
@@ -26,12 +24,12 @@ There are 4 elements:
 -   Power Automate Cloud flow: is used to get the request from the app and send
     the sign in request to Microsoft Graph, and respond the result to the app.
 
--   Power Apps Canvas app: The user use the app and click resign. The app saves
+-   Power Apps Canvas app: The user uses the app and click resign. The app saves
     the data and redirect the user the Office 365 login service. After the login
     the request is redirected back to the app, it loads the data and call the
     cloud flow to validate the user that did the login.
 
--   Dataverse Table: is used to store the data and session id. But you can use
+-   Dataverse Table is used to store the data and session id. But you can use
     whatever table to store the data and you can use another id for the session
     id, can be the unique id from the table record.
 
@@ -87,40 +85,40 @@ to sign in as the user. You can use the same App Registration for many apps.
 
 # Import the sample solution
 
-1.  Download the “eSignaturewithSignin_x_x_x_x.zip” solution file and import it 
-    
-    ![Graphical user interface, application Description automatically
+1.  Download the “eSignaturewithSignin_x_x_x_x.zip” solution file and import it
+
+2.  ![Graphical user interface, application Description automatically
     generated](media/b6d8f65073a11d5b942320b9d94bfc0f.png)
 
-2.  Update the environments variable and click “Import”  
+3.  Update the environments variable and click “Import”  
     ![Graphical user interface, application Description automatically
     generated](media/89535a7b49b1f83926d2fb2bc98728c0.png)
 
-3.  After import open the solution
+4.  After import open the solution
 
-4.  Open Settings of the Canvas App  
+5.  Open Settings of the Canvas App  
     ![Graphical user interface, application, Word Description automatically
     generated](media/fbe591b232c167ccb2197ce6b87a6777.png)
 
-5.  Get the web link of your app (without the ?tenantid), and App ID and save
+6.  Get the web link of your app (without the ?tenantid), and App ID and save
     them for later.  
     ![Graphical user interface, text, application, email Description
     automatically generated](media/4cc5faf4999bda9c31cb5e8347fdec41.png)
 
-6.  Update the “eSignaturePowerAppID” environment variable:  
+7.  Update the “eSignaturePowerAppID” environment variable:  
     ![Background pattern, rectangle Description automatically generated with
     medium confidence](media/de8e3ad35d60ef6c67f9120a038f40b6.png)
 
-7.  Replace the current value with the appid you just saved  
+8.  Replace the current value with the appid you just saved  
     ![Graphical user interface, text, application, email Description
     automatically generated](media/64f4bb6f4f00d8b875cd9725c7726184.png)
 
-8.  Save the variable.
+9.  Save the variable.
 
 # Update the Application Registration in Azure AD
 
-We need to add the app URL to the app registration, to be able to de the
-redirect back to the app. There can be multiple URL’s for many apps.
+We need to add the app URL to the app registration, to be able to do the
+redirect back to the app. There can be multiple URLs for many apps.
 
 1.  In Overview click “Redirect URIs”  
     ![Graphical user interface, text, application, email Description
@@ -139,13 +137,13 @@ redirect back to the app. There can be multiple URL’s for many apps.
 
     4.  Now you are done with the App registration.
 
-Note: there can be many web’s added to the same App Registration.
+Note: there can be many webs added to the same App Registration.
 
 # 
 
 # Update the cloud flow
 
-The cloud flow need to bed turn off and on again to register the updated
+The cloud flow needs to bed turn off and on again to register the updated
 environment variables.
 
 1.  Turn the cloud flow “CheckTokenCode” off  
@@ -164,12 +162,12 @@ environment variables.
 
     1.  Enter sample data I AnswerA and B
 
-    2.  Click “reSigin”
+    2.  Click “reSignin”
 
     3.  Enter Password and Sign in  
         ![Graphical user interface, application Description automatically
         generated](media/4fbfe6462c0f60a6327e4f430c56d3d5.png)
 
-    4.  See that the data is loaded and the user email is validated  
+    4.  See that the data is loaded, and the user email is validated  
         ![Graphical user interface, text Description automatically
         generated](media/7a7b4b4a7f0e743fe1198222f7fd1329.png)
