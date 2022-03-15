@@ -1,6 +1,6 @@
-# Create a simple eSignature solution on Power Apps V2
+# Create a simple eSignature solution on Power Apps V2.1
 
-By Martin Boejstrup, Microsoft 3/2/2022
+By Martin Boejstrup, Microsoft 3/15/2022
 
 ### Background
 
@@ -11,23 +11,29 @@ solution.
 This solution uses a sign in request as an electronic signature, as a no/low
 code using build-in features.  
 ![Diagram Description automatically
-generated](media/02050747c2a56c46335ad9c17c5758f6.png)
+generated](media/1ecf3a47a3f69a03f520b99c31867aff.png)
 
 The solution the standard “Office 365 login” to validate the user, send the
 request back to the Power App. The app uses a cloud flow to call Microsoft Graph
 to check which user did the login to ensure the login was done by the same user.
 
-There are 4 elements:
+There are 5 elements:
 
 -   Azure AD App Registration: is used to be able to connect to Microsoft Graph.
 
 -   Power Automate Cloud flow: is used to get the request from the app and send
     the sign in request to Microsoft Graph, and respond the result to the app.
 
--   Power Apps Canvas app: The user uses the app and click resign. The app saves
-    the data and redirect the user the Office 365 login service. After the login
-    the request is redirected back to the app, it loads the data and call the
-    cloud flow to validate the user that did the login.
+-   Power Apps Canvas app “main”: The user uses the app and click resign. The
+    app saves the data and redirect the user the Office 365 login service. After
+    the login the request is redirected back to the app, it loads the data and
+    call the cloud flow to validate the user that did the login.
+
+-   Power Apps Canvas app “Redirect”: This is used to address the problem in the
+    mobile Power Apps player on Android and iOS. When opened is just opening the
+    “main” app. The problem is that if the main app is open in the mobile player
+    and ist called again its not picking up the request parameter. But if we
+    call the redirect app, and then redirect to the main app it works.
 
 -   Dataverse Table is used to store the data and session id. But you can use
     whatever table to store the data and you can use another id for the session
@@ -96,7 +102,7 @@ to sign in as the user. You can use the same App Registration for many apps.
 
 4.  After import open the solution
 
-5.  Open Settings of the Canvas App  
+5.  Open Settings of the “Main” Canvas App  
     ![Graphical user interface, application, Word Description automatically
     generated](media/fbe591b232c167ccb2197ce6b87a6777.png)
 
@@ -109,33 +115,54 @@ to sign in as the user. You can use the same App Registration for many apps.
     ![Background pattern, rectangle Description automatically generated with
     medium confidence](media/de8e3ad35d60ef6c67f9120a038f40b6.png)
 
-8.  Replace the current value with the appid you just saved  
-    ![Graphical user interface, text, application, email Description
-    automatically generated](media/64f4bb6f4f00d8b875cd9725c7726184.png)
+8.  Replace the current value with the appid you just saved
 
-9.  Save the variable.
+9.  Open Details of the “Redirect” Canvas App  
+    ![Graphical user interface, application Description automatically
+    generated](media/61e3c445373f21c5488ea34aeb930206.png)
+
+10. Get the web link of your app (without the ?tenantid), and App ID and save
+    them for later.  
+    ![Graphical user interface, text, application, email Description
+    automatically generated](media/db23a31116e6c3a067d5f690ace74426.png)
+
+11. Update the “eSignaturePowerAppIDRedirect” environment variable:  
+    ![Graphical user interface, text, application Description automatically
+    generated](media/0b7bd517f85c7ffd998d24efd473d0b4.png)
+
+12. Replace the current value with the appid you just saved  
+    ![Graphical user interface, text, application, email Description
+    automatically generated](media/f5941b6f7b38e00a3386bdc4ca4e230e.png)
+
+13. Save the variable.
 
 # Update the Application Registration in Azure AD
 
-We need to add the app URL to the app registration, to be able to do the
-redirect back to the app. There can be multiple URLs for many apps.
+We need to add the app URL for both canvas apps to the app registration, to be
+able to do the redirect back to the app.
 
-1.  In Overview click “Redirect URIs”  
-    ![Graphical user interface, text, application, email Description
-    automatically generated](media/782ff22330ccc1754b1cdc9d211d22d6.png)
+In Overview click “Redirect URIs”  
+![Graphical user interface, text, application, email Description automatically
+generated](media/782ff22330ccc1754b1cdc9d211d22d6.png)
 
-    1.  Click “Add a platform” and select “Web”  
-        ![Graphical user interface, application, Word Description automatically
-        generated](media/ce03699f8876f35807efdd55269efaf5.png)
+1.  Click “Add a platform” and select “Web”  
+    ![Graphical user interface, application, Word Description automatically
+    generated](media/ce03699f8876f35807efdd55269efaf5.png)
 
-    2.  Add the URL og the Web link to the app  
+    1.  Add the URL of the “main” app og the Web link to the app  
         ![Graphical user interface, text, application Description automatically
         generated with medium
         confidence](media/0c221778ee4507365af495012ed67dcd.png)
 
-    3.  Click “Configure”
+    2.  Add the URL of the “redirect” app og the Web link to the app  
+        ![Graphical user interface, application Description automatically
+        generated](media/52631a60e7fcb551a0448326d82ae7c8.png)
 
-    4.  Now you are done with the App registration.
+    3.  You now have two urls.
+
+    4.  Click “Configure”
+
+    5.  Now you are done with the App registration.
 
 Note: there can be many webs added to the same App Registration.
 
